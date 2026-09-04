@@ -25,19 +25,24 @@ public:
     }
 
     void display() {
-        cout << "\nID: " << id;
-        cout << "\nName: " << name;
-        cout << "\nMarks: " << marks << endl;
+        cout << "\nID: " << id << endl;
+        cout << "Name: " << name << endl;
+        cout << "Marks: " << marks << endl;
     }
 };
 
-// Add a new student
+// Add Student
 void addStudent() {
     Student s;
 
     s.input();
 
     ofstream file("students.txt", ios::app);
+
+    if (!file) {
+        cout << "\nError opening file!\n";
+        return;
+    }
 
     file << s.id << "|" << s.name << "|" << s.marks << endl;
 
@@ -46,7 +51,7 @@ void addStudent() {
     cout << "\nStudent added successfully!\n";
 }
 
-// Display all students
+// Display All Students
 void displayStudents() {
     ifstream file("students.txt");
 
@@ -55,8 +60,8 @@ void displayStudents() {
         return;
     }
 
-    Student s;
     string line;
+    bool found = false;
 
     cout << "\n==============================";
     cout << "\n      STUDENT RECORDS";
@@ -66,21 +71,31 @@ void displayStudents() {
         size_t first = line.find('|');
         size_t second = line.find('|', first + 1);
 
-        if (first == string::npos || second == string::npos)
+        if (first == string::npos || second == string::npos) {
             continue;
+        }
 
-        s.id = stoi(line.substr(0, first));
-        s.name = line.substr(first + 1, second - first - 1);
-        s.marks = stof(line.substr(second + 1));
+        int id = stoi(line.substr(0, first));
+        string name = line.substr(first + 1, second - first - 1);
+        float marks = stof(line.substr(second + 1));
 
-        s.display();
-        cout << "------------------------------\n";
+        cout << "\nID: " << id;
+        cout << "\nName: " << name;
+        cout << "\nMarks: " << marks << endl;
+
+        cout << "------------------------------";
+
+        found = true;
     }
 
     file.close();
+
+    if (!found) {
+        cout << "\nNo student records found.\n";
+    }
 }
 
-// Search for a student
+// Search Student
 void searchStudent() {
     int searchId;
 
@@ -101,20 +116,20 @@ void searchStudent() {
         size_t first = line.find('|');
         size_t second = line.find('|', first + 1);
 
-        if (first == string::npos || second == string::npos)
+        if (first == string::npos || second == string::npos) {
             continue;
+        }
 
         int id = stoi(line.substr(0, first));
 
         if (id == searchId) {
+            string name = line.substr(first + 1, second - first - 1);
+            string marks = line.substr(second + 1);
+
             cout << "\nStudent Found!\n";
             cout << "ID: " << id << endl;
-            cout << "Name: "
-                 << line.substr(first + 1, second - first - 1)
-                 << endl;
-            cout << "Marks: "
-                 << line.substr(second + 1)
-                 << endl;
+            cout << "Name: " << name << endl;
+            cout << "Marks: " << marks << endl;
 
             found = true;
             break;
@@ -123,11 +138,12 @@ void searchStudent() {
 
     file.close();
 
-    if (!found)
+    if (!found) {
         cout << "\nStudent not found.\n";
+    }
 }
 
-// Update student details
+// Update Student
 void updateStudent() {
     int searchId;
 
@@ -149,13 +165,15 @@ void updateStudent() {
         size_t first = line.find('|');
         size_t second = line.find('|', first + 1);
 
-        if (first == string::npos || second == string::npos)
+        if (first == string::npos || second == string::npos) {
             continue;
+        }
 
         int id = stoi(line.substr(0, first));
 
         if (id == searchId) {
             Student s;
+
             s.id = id;
 
             cin.ignore();
@@ -166,12 +184,11 @@ void updateStudent() {
             cout << "Enter New Marks: ";
             cin >> s.marks;
 
-            temp << s.id << "|"
-                 << s.name << "|"
-                 << s.marks << endl;
+            temp << s.id << "|" << s.name << "|" << s.marks << endl;
 
             found = true;
-        } else {
+        }
+        else {
             temp << line << endl;
         }
     }
@@ -182,13 +199,15 @@ void updateStudent() {
     remove("students.txt");
     rename("temp.txt", "students.txt");
 
-    if (found)
+    if (found) {
         cout << "\nStudent updated successfully!\n";
-    else
+    }
+    else {
         cout << "\nStudent not found.\n";
+    }
 }
 
-// Delete a student
+// Delete Student
 void deleteStudent() {
     int deleteId;
 
@@ -210,8 +229,9 @@ void deleteStudent() {
         size_t first = line.find('|');
         size_t second = line.find('|', first + 1);
 
-        if (first == string::npos || second == string::npos)
+        if (first == string::npos || second == string::npos) {
             continue;
+        }
 
         int id = stoi(line.substr(0, first));
 
@@ -229,17 +249,20 @@ void deleteStudent() {
     remove("students.txt");
     rename("temp.txt", "students.txt");
 
-    if (found)
+    if (found) {
         cout << "\nStudent deleted successfully!\n";
-    else
+    }
+    else {
         cout << "\nStudent not found.\n";
+    }
 }
 
+// Main Function
 int main() {
     int choice;
 
     do {
-        cout << "\n==============================";
+        cout << "\n\n==============================";
         cout << "\n   STUDENT RECORD MANAGEMENT";
         cout << "\n==============================";
 
