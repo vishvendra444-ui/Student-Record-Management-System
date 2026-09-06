@@ -35,6 +35,16 @@ The application provides a menu through which users can add, view, search, updat
 ## How to Run
 
 ### 1. Clone the repository
+## Demo
+
+### Add Student
+![Add Student](add%20student.png.png)
+
+### Update Student
+![Update Student](update%20student.png.png)
+
+### Delete Student
+![Delete Student](delete%20student.png.png)
 
 ```bash
 git clone https://github.com/vishvendra444-ui/Student-Record-Management-System.git
